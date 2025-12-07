@@ -3,6 +3,7 @@ import DocItem from '@theme-original/DocItem';
 import type DocItemType from '@theme/DocItem';
 import type { WrapperProps } from '@docusaurus/types';
 import TranslateButton from '@site/src/components/TranslateButton/TranslateButton';
+import PersonalizeButton from '@site/src/components/PersonalizeButton/PersonalizeButton';
 import { useDoc } from '@docusaurus/theme-common/internal';
 
 type Props = WrapperProps<typeof DocItemType>;
@@ -55,7 +56,12 @@ export default function DocItemWrapper(props: Props): JSX.Element {
 
   return (
     <>
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <PersonalizeButton
+          originalContent={getOriginalContent()}
+          chapterId={metadata.id}
+          onContentChange={handleContentChange}
+        />
         <TranslateButton
           originalContent={getOriginalContent()}
           chapterId={metadata.id}
