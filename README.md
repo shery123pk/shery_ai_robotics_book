@@ -215,9 +215,9 @@ After completing this textbook, students will be able to:
 | RAG chatbot with text-selection | 50 | ✅ |
 | Authentication + questionnaire | +50 | ✅ |
 | Content personalization | +50 | ⬜ |
-| Urdu translation | +50 | ⬜ |
+| Urdu translation | +50 | ✅ |
 | Claude Code Subagents | +50 | ✅ |
-| **Total** | **300** | **200** |
+| **Total** | **300** | **250** |
 
 ---
 
