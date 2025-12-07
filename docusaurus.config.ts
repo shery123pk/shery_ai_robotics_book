@@ -15,17 +15,14 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  // TODO: Update with your GitHub Pages URL
-  url: 'https://your-username.github.io',
+  url: 'https://shery123pk.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  // TODO: Update with your repository name
-  baseUrl: '/shery_ai_book/',
+  baseUrl: '/shery_ai_robotics_book/',
 
   // GitHub pages deployment config.
-  // TODO: Update with your GitHub username/organization
-  organizationName: 'your-username', // Usually your GitHub org/user name.
-  projectName: 'shery_ai_book', // Usually your repo name.
+  organizationName: 'shery123pk', // Usually your GitHub org/user name.
+  projectName: 'shery_ai_robotics_book', // Usually your repo name.
 
   onBrokenLinks: 'warn', // Temporarily set to warn until we create all module content
 
@@ -44,8 +41,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           routeBasePath: 'docs', // Serve docs at /docs
-          // TODO: Update with your repo URL for "edit this page" links
-          editUrl: 'https://github.com/your-username/shery_ai_book/tree/main/',
+          editUrl: 'https://github.com/shery123pk/shery_ai_robotics_book/tree/main/',
         },
         blog: false, // Disable blog functionality
         theme: {
@@ -98,8 +94,7 @@ const config: Config = {
           ],
         },
         {
-          // TODO: Update with your GitHub repository URL
-          href: 'https://github.com/your-username/shery_ai_book',
+          href: 'https://github.com/shery123pk/shery_ai_robotics_book',
           label: 'GitHub',
           position: 'right',
         },
@@ -142,7 +137,7 @@ const config: Config = {
             },
             {
               label: 'GitHub Repository',
-              href: 'https://github.com/your-username/shery_ai_book',
+              href: 'https://github.com/shery123pk/shery_ai_robotics_book',
             },
           ],
         },

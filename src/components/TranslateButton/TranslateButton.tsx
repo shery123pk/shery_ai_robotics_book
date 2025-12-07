@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './TranslateButton.module.css';
+import { getApiUrl } from '../../utils/apiConfig';
 
 interface TranslateButtonProps {
   originalContent: string;
@@ -38,7 +39,7 @@ const TranslateButton: React.FC<TranslateButtonProps> = ({
 
     try {
       const sessionId = getSessionId();
-      const response = await fetch('http://localhost:8000/api/content/translate', {
+      const response = await fetch(getApiUrl('/api/content/translate'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

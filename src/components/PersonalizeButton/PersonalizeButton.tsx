@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './PersonalizeButton.module.css';
+import { getApiUrl } from '../../utils/apiConfig';
 
 interface PersonalizeButtonProps {
   originalContent: string;
@@ -59,7 +60,7 @@ const PersonalizeButton: React.FC<PersonalizeButtonProps> = ({
       const sessionId = getSessionId();
       const userId = localStorage.getItem('user_id');
 
-      const response = await fetch('http://localhost:8000/api/content/personalize', {
+      const response = await fetch(getApiUrl('/api/content/personalize'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

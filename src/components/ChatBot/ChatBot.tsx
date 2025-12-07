@@ -3,6 +3,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import { getApiUrl } from '../../utils/apiConfig';
 
 interface Message {
   id: string;
@@ -18,7 +19,7 @@ interface Citation {
   section?: string;
 }
 
-export default function ChatBot(): JSX.Element {
+export default function ChatBot(): React.JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -62,7 +63,7 @@ export default function ChatBot(): JSX.Element {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/chat/message', {
+      const response = await fetch(getApiUrl('/api/chat/message'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +76,16 @@ export default function ChatBot(): JSX.Element {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // Try to get error details from response
+        let errorDetail = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorDetail = errorData.detail || errorData.message || errorDetail;
+        } catch {
+          // If response is not JSON, use status text
+          errorDetail = `HTTP ${response.status}: ${response.statusText}`;
+        }
+        throw new Error(errorDetail);
       }
 
       const data = await response.json();
@@ -92,11 +102,24 @@ export default function ChatBot(): JSX.Element {
 
     } catch (error) {
       console.error('Chat error:', error);
+      
+      // Provide more detailed error message
+      let errorContent = 'Sorry, I encountered an error. Please try again.';
+      
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          errorContent = 'Unable to connect to the server. Please make sure the backend is running on http://localhost:8000';
+        } else if (error.message.includes('HTTP error')) {
+          errorContent = `Server error: ${error.message}. Please check the backend logs.`;
+        } else {
+          errorContent = `Error: ${error.message}`;
+        }
+      }
 
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.',
+        content: errorContent,
         timestamp: new Date()
       };
 
