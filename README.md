@@ -211,13 +211,13 @@ After completing this textbook, students will be able to:
 
 | Feature | Points | Status |
 |---------|--------|--------|
-| Docusaurus book deployed | 50 | ⬜ |
-| RAG chatbot with text-selection | 50 | ⬜ |
-| Authentication + questionnaire | +50 | ⬜ |
+| Docusaurus book deployed | 50 | ✅ |
+| RAG chatbot with text-selection | 50 | ✅ |
+| Authentication + questionnaire | +50 | ✅ |
 | Content personalization | +50 | ⬜ |
 | Urdu translation | +50 | ⬜ |
-| Claude Code Subagents | +50 | ⬜ |
-| **Total** | **300** | **0** |
+| Claude Code Subagents | +50 | ✅ |
+| **Total** | **300** | **200** |
 
 ---
 
