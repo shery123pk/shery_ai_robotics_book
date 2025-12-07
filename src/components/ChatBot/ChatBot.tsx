@@ -62,7 +62,7 @@ export default function ChatBot(): JSX.Element {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/chat/message', {
+      const response = await fetch('http://localhost:8000/api/chat/message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

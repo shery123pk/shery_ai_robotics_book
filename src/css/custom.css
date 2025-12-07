@@ -109,6 +109,10 @@
   cursor: not-allowed;
   transform: none;
 }
+.rtl-text {
+  text-align: right !important;
+  font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif !important;
+}
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {

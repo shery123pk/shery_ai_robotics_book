@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uvicorn:*)",
+      "Bash(pip install:*)",
+      "Bash(curl:*)",
+      "Bash(git add backend/ START.bat)",
+      "Bash(taskkill:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

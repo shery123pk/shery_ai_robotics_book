@@ -4,7 +4,7 @@ import styles from './PersonalizeButton.module.css';
 interface PersonalizeButtonProps {
   originalContent: string;
   chapterId: string;
-  onContentChange: (content: string, isPersonalized: boolean) => void;
+  onContentChange: (content: string, isUrdu: boolean) => void;
 }
 
 interface UserProfile {
@@ -34,7 +34,7 @@ const PersonalizeButton: React.FC<PersonalizeButtonProps> = ({
     if (isPersonalized) {
       // Reset to original
       setIsPersonalized(false);
-      onContentChange(originalContent, false);
+      onContentChange(originalContent, false); // false = not Urdu
       return;
     }
 
@@ -47,7 +47,7 @@ const PersonalizeButton: React.FC<PersonalizeButtonProps> = ({
     // Check if already personalized (cached)
     if (personalizedContent) {
       setIsPersonalized(true);
-      onContentChange(personalizedContent, true);
+      onContentChange(personalizedContent, false); // false = not Urdu (personalization is never Urdu)
       return;
     }
 
@@ -84,7 +84,7 @@ const PersonalizeButton: React.FC<PersonalizeButtonProps> = ({
       const data = await response.json();
       setPersonalizedContent(data.personalized_content);
       setIsPersonalized(true);
-      onContentChange(data.personalized_content, true);
+      onContentChange(data.personalized_content, false); // false = not Urdu (personalization is never Urdu)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Personalization failed');
       console.error('Personalization error:', err);
