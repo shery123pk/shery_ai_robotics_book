@@ -4,46 +4,47 @@ Defines request/response schemas for signup and signin.
 """
 
 from pydantic import BaseModel, EmailStr, Field
-from typing import Literal
+from typing import Optional
 from datetime import datetime
 
 
-class SignUpRequest(BaseModel):
-    """Request schema for user signup with background questionnaire."""
+class UserCreate(BaseModel):
+    """Request schema for user signup."""
 
     email: EmailStr = Field(..., description="User email address")
     password: str = Field(..., min_length=8, description="User password (min 8 characters)")
-    software_experience: Literal["beginner", "intermediate", "advanced"] = Field(
-        ..., description="Software development experience level"
-    )
-    hardware_experience: Literal["none", "hobbyist", "professional"] = Field(
-        ..., description="Hardware/robotics experience level"
-    )
+    full_name: str = Field(..., min_length=2, max_length=100, description="User's full name")
+    role: Optional[str] = Field(default="student", description="User role (student, instructor, researcher)")
+    background: Optional[str] = Field(default=None, description="Educational/professional background")
 
 
-class SignInRequest(BaseModel):
-    """Request schema for user signin."""
+class UserLogin(BaseModel):
+    """Request schema for user login."""
 
     email: EmailStr = Field(..., description="User email address")
     password: str = Field(..., description="User password")
 
 
-class TokenResponse(BaseModel):
-    """Response schema for authentication (signup/signin)."""
+class UserResponse(BaseModel):
+    """Response schema for user information."""
 
-    user_id: str = Field(..., description="User UUID")
+    id: str = Field(..., description="User UUID")
     email: str = Field(..., description="User email address")
+    full_name: str = Field(..., description="User's full name")
+    role: str = Field(..., description="User role")
+    background: Optional[str] = Field(None, description="User background")
+    created_at: datetime = Field(..., description="Account creation timestamp")
+
+
+class TokenResponse(BaseModel):
+    """Response schema for authentication (signup/login)."""
+
     access_token: str = Field(..., description="JWT access token")
     token_type: str = Field(default="bearer", description="Token type")
-    expires_in: int = Field(..., description="Token expiration time in seconds")
+    user: UserResponse = Field(..., description="User information")
 
 
-class UserProfile(BaseModel):
-    """User profile information."""
-
-    user_id: str = Field(..., description="User UUID")
-    email: str = Field(..., description="User email address")
-    software_experience: str = Field(..., description="Software experience level")
-    hardware_experience: str = Field(..., description="Hardware experience level")
-    created_at: datetime = Field(..., description="Account creation timestamp")
-    last_login: datetime | None = Field(None, description="Last login timestamp")
+# Legacy aliases for backward compatibility
+SignUpRequest = UserCreate
+SignInRequest = UserLogin
+UserProfile = UserResponse

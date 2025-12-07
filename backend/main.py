@@ -46,14 +46,14 @@ async def health_check():
 
 
 # Import and include routers
-from api import chat
+from api import chat, auth
 
-# Register chat router
+# Register routers
 app.include_router(chat.router, tags=["chat"])
+app.include_router(auth.router, tags=["auth"])
 
 # Additional routers (to be added in later phases)
-# from api import auth, content
-# app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+# from api import content
 # app.include_router(content.router, prefix="/api", tags=["content"])
 
 
