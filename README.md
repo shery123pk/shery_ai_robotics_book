@@ -29,18 +29,37 @@ This project is an interactive textbook built with **Docusaurus 3** and powered 
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### ⚡ One-Click Startup (Easiest Way!)
+
+**Windows:**
+1. Double-click `SETUP.bat` (first time only)
+2. Edit `backend\.env` with your API keys
+3. Double-click `START.bat` to run everything!
+
+**Linux/Mac:**
+```bash
+chmod +x START.sh
+./START.sh
+```
+
+That's it! Both frontend and backend will start automatically.
+
+---
+
+### 📋 Manual Setup (If you prefer)
+
+#### Prerequisites
 
 - **Node.js** 18+ (for Docusaurus frontend)
 - **Python** 3.11+ (for FastAPI backend)
 - **npm** or **pnpm** (package manager)
 - **Git** (version control)
 
-### Installation
+#### Installation
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/shery_ai_book.git
+   git clone https://github.com/shery123pk/shery_ai_robotics_book.git
    cd shery_ai_book
    ```
 
@@ -60,15 +79,15 @@ This project is an interactive textbook built with **Docusaurus 3** and powered 
 
 4. **Configure environment variables**:
    ```bash
-   cp .env.example .env
-   # Edit .env and add your API keys:
+   cp backend/.env.example backend/.env
+   # Edit backend/.env and add your API keys:
    # - OPENAI_API_KEY (from https://platform.openai.com/api-keys)
    # - QDRANT_URL and QDRANT_API_KEY (from https://cloud.qdrant.io/)
    # - DATABASE_URL (from https://neon.tech/)
    # - JWT_SECRET_KEY (generate with: openssl rand -hex 32)
    ```
 
-### Development
+#### Development
 
 1. **Start the Docusaurus development server**:
    ```bash
@@ -80,14 +99,16 @@ This project is an interactive textbook built with **Docusaurus 3** and powered 
    ```bash
    cd backend
    source venv/bin/activate  # On Windows: venv\Scripts\activate
-   uvicorn main:app --reload --port 8000
+   python main.py
    ```
    API available at `http://localhost:8000`
 
-3. **Generate embeddings** (one-time setup):
+3. **Setup databases** (one-time):
    ```bash
    cd backend
-   python ../scripts/generate_embeddings.py
+   python database/run_migrations.py
+   python database/setup_qdrant.py
+   python ingest_content.py
    ```
 
 ### Build for Production
