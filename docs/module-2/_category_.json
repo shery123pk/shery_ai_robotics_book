@@ -1,0 +1,8 @@
+{
+  "label": "Module 2: Gazebo & Unity",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Master physics simulation and digital twin creation using Gazebo Classic, Gazebo Garden, and Unity. Learn to simulate sensors, environments, and robot behaviors before deploying to hardware."
+  }
+}

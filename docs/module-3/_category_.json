@@ -1,0 +1,8 @@
+{
+  "label": "Module 3: NVIDIA Isaac",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Accelerate robot development with NVIDIA Isaac Sim and Isaac ROS. Learn GPU-accelerated perception, VSLAM, and navigation for high-performance robotics applications."
+  }
+}

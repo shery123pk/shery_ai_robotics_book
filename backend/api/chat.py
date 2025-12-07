@@ -1,0 +1,190 @@
+"""
+Chat API endpoint for RAG chatbot
+"""
+
+from fastapi import APIRouter, HTTPException, Depends
+from backend.models.chat import ChatRequest, ChatResponse, Citation
+from backend.database.qdrant import get_qdrant_client
+from backend.database.postgres import get_db_pool
+from backend.utils.rate_limit import is_rate_limited
+from backend.utils.logger import get_logger
+from backend.config import settings
+from openai import OpenAI
+from qdrant_client.models import Filter, FieldCondition, MatchValue
+import asyncpg
+from typing import List
+import uuid
+
+router = APIRouter(prefix="/api/chat", tags=["chat"])
+logger = get_logger(__name__)
+openai_client = OpenAI(api_key=settings.openai_api_key)
+
+
+async def get_relevant_content(query: str, limit: int = 5) -> List[dict]:
+    """Retrieve relevant content from Qdrant vector database."""
+    qdrant = get_qdrant_client()
+
+    # Generate embedding for query
+    response = openai_client.embeddings.create(
+        model="text-embedding-3-small",
+        input=query
+    )
+    query_embedding = response.data[0].embedding
+
+    # Search in Qdrant
+    search_results = qdrant.search(
+        collection_name="textbook_content",
+        query_vector=query_embedding,
+        limit=limit,
+        with_payload=True
+    )
+
+    # Extract relevant chunks
+    contexts = []
+    for result in search_results:
+        contexts.append({
+            "text": result.payload.get("text", ""),
+            "module": result.payload.get("module", ""),
+            "chapter": result.payload.get("chapter", ""),
+            "section": result.payload.get("section", ""),
+            "score": result.score
+        })
+
+    return contexts
+
+
+async def generate_response(query: str, contexts: List[dict]) -> tuple[str, List[Citation]]:
+    """Generate response using GPT-4 with retrieved context."""
+
+    # Build context string
+    context_text = "\n\n".join([
+        f"[{ctx['module']} - {ctx['chapter']}]\n{ctx['text']}"
+        for ctx in contexts
+    ])
+
+    # System prompt
+    system_prompt = """You are an expert AI tutor for Physical AI and Humanoid Robotics.
+    Answer the student's question using ONLY the provided context from the textbook.
+
+    Rules:
+    1. Be concise and educational
+    2. Use technical terminology accurately
+    3. Reference specific modules/chapters when relevant
+    4. If the context doesn't contain the answer, say "I don't have information about that in the current textbook content."
+    5. Include code examples if present in context
+
+    Format your response in Markdown.
+    """
+
+    # User prompt
+    user_prompt = f"""Context from textbook:
+{context_text}
+
+Student question: {query}
+
+Please answer the question based on the context above."""
+
+    # Call GPT-4
+    completion = openai_client.chat.completions.create(
+        model="gpt-4-turbo-preview",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ],
+        temperature=0.7,
+        max_tokens=1000
+    )
+
+    answer = completion.choices[0].message.content
+
+    # Create citations
+    citations = [
+        Citation(
+            module=ctx["module"],
+            chapter=ctx["chapter"],
+            section=ctx.get("section")
+        )
+        for ctx in contexts[:3]  # Top 3 citations
+    ]
+
+    return answer, citations
+
+
+@router.post("/message", response_model=ChatResponse)
+async def chat_message(request: ChatRequest):
+    """
+    Handle chat message and return AI response with citations
+    """
+
+    # Rate limiting
+    rate_key = f"chat:{request.session_id}"
+    if is_rate_limited(rate_key, limit=10, window_seconds=60):
+        raise HTTPException(status_code=429, detail="Rate limit exceeded. Please wait a moment.")
+
+    try:
+        logger.info(f"Chat query: {request.message[:100]}")
+
+        # Retrieve relevant content
+        contexts = await get_relevant_content(request.message, limit=5)
+
+        if not contexts:
+            return ChatResponse(
+                response="I couldn't find relevant information in the textbook. Could you rephrase your question?",
+                citations=[],
+                session_id=request.session_id
+            )
+
+        # Generate response
+        answer, citations = await generate_response(request.message, contexts)
+
+        # Store in database (async)
+        if request.user_id:
+            try:
+                pool = await get_db_pool()
+                async with pool.acquire() as conn:
+                    await conn.execute(
+                        """
+                        INSERT INTO chat_messages (user_id, session_id, message_text, response_text, citations)
+                        VALUES ($1, $2, $3, $4, $5)
+                        """,
+                        uuid.UUID(request.user_id) if request.user_id else None,
+                        request.session_id,
+                        request.message,
+                        answer,
+                        [{"module": c.module, "chapter": c.chapter, "section": c.section} for c in citations]
+                    )
+            except Exception as e:
+                logger.error(f"Failed to store chat message: {e}")
+                # Don't fail the request if storage fails
+
+        logger.info(f"Response generated with {len(citations)} citations")
+
+        return ChatResponse(
+            response=answer,
+            citations=citations,
+            session_id=request.session_id
+        )
+
+    except Exception as e:
+        logger.error(f"Chat error: {e}")
+        raise HTTPException(status_code=500, detail=f"Chat error: {str(e)}")
+
+
+@router.get("/health")
+async def chat_health():
+    """Health check for chat service"""
+    try:
+        # Test Qdrant connection
+        qdrant = get_qdrant_client()
+        collections = qdrant.get_collections()
+
+        # Test OpenAI connection
+        openai_client.models.list()
+
+        return {
+            "status": "healthy",
+            "qdrant_collections": len(collections.collections),
+            "openai": "connected"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=f"Service unhealthy: {str(e)}")
