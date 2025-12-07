@@ -18,9 +18,17 @@ import uuid
 sys.path.append(str(Path(__file__).parent.parent))
 
 from backend.config import settings
-from backend.utils.logger import get_logger
 
-logger = get_logger(__name__)
+# Simple print-based logging
+class SimpleLogger:
+    @staticmethod
+    def info(msg): print(f"[INFO] {msg}")
+    @staticmethod
+    def error(msg): print(f"[ERROR] {msg}")
+    @staticmethod
+    def warning(msg): print(f"[WARNING] {msg}")
+
+logger = SimpleLogger()
 
 
 def parse_markdown_file(file_path: Path) -> Dict:

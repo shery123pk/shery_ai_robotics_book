@@ -11,7 +11,7 @@ from config import settings
 
 async def run_migrations():
     """Run all SQL migrations in the migrations/ directory."""
-    print("🔄 Starting database migrations...")
+    print("[*] Starting database migrations...")
 
     # Connect to database
     conn = await asyncpg.connect(dsn=settings.database_url)
@@ -22,12 +22,12 @@ async def run_migrations():
         migration_files = sorted(migrations_dir.glob("*.sql"))
 
         if not migration_files:
-            print("⚠️  No migration files found")
+            print("[!] No migration files found")
             return
 
         # Execute each migration
         for migration_file in migration_files:
-            print(f"\n📝 Running migration: {migration_file.name}")
+            print(f"\n[+] Running migration: {migration_file.name}")
 
             # Read SQL file
             sql = migration_file.read_text(encoding="utf-8")
@@ -35,12 +35,12 @@ async def run_migrations():
             # Execute migration
             await conn.execute(sql)
 
-            print(f"✅ Completed: {migration_file.name}")
+            print(f"[OK] Completed: {migration_file.name}")
 
-        print("\n🎉 All migrations completed successfully!")
+        print("\n[SUCCESS] All migrations completed successfully!")
 
     except Exception as e:
-        print(f"\n❌ Migration failed: {str(e)}")
+        print(f"\n[ERROR] Migration failed: {str(e)}")
         raise
 
     finally:

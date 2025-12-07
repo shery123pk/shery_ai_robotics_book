@@ -10,7 +10,7 @@ from config import settings
 
 async def setup_qdrant_collection():
     """Set up Qdrant collection for book embeddings."""
-    print("🔄 Setting up Qdrant collection...")
+    print("[*] Setting up Qdrant collection...")
 
     try:
         # Create collection if it doesn't exist
@@ -20,15 +20,15 @@ async def setup_qdrant_collection():
         client = get_qdrant_client()
         collection_info = client.get_collection(settings.qdrant_collection_name)
 
-        print(f"\n✅ Qdrant collection ready: {settings.qdrant_collection_name}")
+        print(f"\n[OK] Qdrant collection ready: {settings.qdrant_collection_name}")
         print(f"   - Vectors size: {collection_info.config.params.vectors.size}")
         print(f"   - Distance: {collection_info.config.params.vectors.distance}")
         print(f"   - Points count: {collection_info.points_count}")
 
-        print("\n🎉 Qdrant setup completed successfully!")
+        print("\n[SUCCESS] Qdrant setup completed successfully!")
 
     except Exception as e:
-        print(f"\n❌ Qdrant setup failed: {str(e)}")
+        print(f"\n[ERROR] Qdrant setup failed: {str(e)}")
         raise
 
 
