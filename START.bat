@@ -75,7 +75,7 @@ echo.
 
 REM Start backend in a new window
 echo [*] Starting Backend (FastAPI) on http://localhost:8000
-start "Physical AI Backend" cmd /k "cd backend && venv\Scripts\activate && python main.py"
+start "Physical AI Backend" cmd /k "cd backend && venv\Scripts\activate && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
 
 REM Wait 3 seconds for backend to initialize
 timeout /t 3 /nobreak >nul

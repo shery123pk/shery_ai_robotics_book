@@ -3,8 +3,8 @@ Translation service for converting textbook content to Urdu
 """
 
 from openai import OpenAI
-from backend.config import settings
-from backend.utils.logger import get_logger
+from config import settings
+from utils.logger import get_logger
 from typing import Optional
 
 logger = get_logger(__name__)

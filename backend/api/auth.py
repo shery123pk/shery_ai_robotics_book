@@ -11,9 +11,9 @@ from pydantic import BaseModel, EmailStr, Field
 import jwt
 from passlib.context import CryptContext
 
-from backend.config import settings
-from backend.database.postgres import get_db_pool
-from backend.models.auth import UserCreate, UserLogin, UserResponse, TokenResponse
+from config import settings
+from database.postgres import get_db_pool
+from models.auth import UserCreate, UserLogin, UserResponse, TokenResponse
 
 router = APIRouter(prefix="/api/auth")
 security = HTTPBearer()

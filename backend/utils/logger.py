@@ -45,6 +45,9 @@ def setup_logger(name: str, level: int = logging.INFO) -> logging.Logger:
 # Default logger for the application
 app_logger = setup_logger("physical_ai_backend")
 
+# Alias for compatibility
+get_logger = setup_logger
+
 
 def log_api_request(endpoint: str, method: str, user_id: str | None = None):
     """

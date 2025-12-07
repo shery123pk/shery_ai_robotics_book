@@ -3,12 +3,12 @@ Chat API endpoint for RAG chatbot
 """
 
 from fastapi import APIRouter, HTTPException, Depends
-from backend.models.chat import ChatRequest, ChatResponse, Citation
-from backend.database.qdrant import get_qdrant_client
-from backend.database.postgres import get_db_pool
-from backend.utils.rate_limit import is_rate_limited
-from backend.utils.logger import get_logger
-from backend.config import settings
+from models.chat import ChatRequest, ChatResponse, Citation
+from database.qdrant import get_qdrant_client
+from database.postgres import get_db_pool
+from utils.rate_limit import is_rate_limited
+from utils.logger import get_logger
+from config import settings
 from openai import OpenAI
 from qdrant_client.models import Filter, FieldCondition, MatchValue
 import asyncpg

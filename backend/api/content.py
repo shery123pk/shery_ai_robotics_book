@@ -4,10 +4,10 @@ Content API endpoints for translation and personalization
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from backend.services.translate_service import translate_to_urdu
-from backend.services.personalize_service import personalize_chapter
-from backend.utils.rate_limit import is_rate_limited
-from backend.utils.logger import get_logger
+from services.translate_service import translate_to_urdu
+from services.personalize_service import personalize_chapter
+from utils.rate_limit import is_rate_limited
+from utils.logger import get_logger
 from typing import Optional
 
 router = APIRouter(prefix="/api/content", tags=["content"])

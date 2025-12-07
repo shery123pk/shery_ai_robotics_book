@@ -17,7 +17,7 @@ import uuid
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from backend.config import settings
+from config import settings
 
 # Simple print-based logging
 class SimpleLogger:

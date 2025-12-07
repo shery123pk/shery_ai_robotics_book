@@ -3,9 +3,9 @@ Content personalization service for adapting chapters to user background
 """
 
 from openai import OpenAI
-from backend.config import settings
-from backend.utils.logger import get_logger
-from backend.database.postgres import get_db_pool
+from config import settings
+from utils.logger import get_logger
+from database.postgres import get_db_pool
 from typing import Optional, Dict
 import hashlib
 from datetime import datetime, timedelta
