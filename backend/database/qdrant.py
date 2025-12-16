@@ -77,12 +77,12 @@ async def search_similar_chunks(
     """
     client = get_qdrant_client()
 
-    results = client.search(
+    results = client.query_points(
         collection_name=settings.qdrant_collection_name,
-        query_vector=query_embedding,
+        query=query_embedding,
         limit=limit,
         score_threshold=score_threshold,
-    )
+    ).points
 
     return [
         {

@@ -32,12 +32,12 @@ async def get_relevant_content(query: str, limit: int = 5) -> List[dict]:
     query_embedding = response.data[0].embedding
 
     # Search in Qdrant
-    search_results = qdrant.search(
-        collection_name="textbook_content",
-        query_vector=query_embedding,
+    search_results = qdrant.query_points(
+        collection_name=settings.qdrant_collection_name,
+        query=query_embedding,
         limit=limit,
         with_payload=True
-    )
+    ).points
 
     # Extract relevant chunks
     contexts = []

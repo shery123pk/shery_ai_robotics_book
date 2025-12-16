@@ -5,7 +5,14 @@
       "Bash(pip install:*)",
       "Bash(curl:*)",
       "Bash(git add backend/ START.bat)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(venv/Scripts/python.exe:*)",
+      "Bash(npm start)",
+      "Bash(venv/Scripts/pip.exe install:*)",
+      "Bash(pgrep:*)",
+      "Bash(pkill:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZDdkYmIyNC03MTgxLTRhZTEtOGI1Zi0wOTM2YWU4NDY5NWIiLCJleHAiOjE3Njg0OTM4NTV9.IIVUetzn9VRhtpvUnHjqfgNEtXNifugFqUo2HYU_Qqw\")",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

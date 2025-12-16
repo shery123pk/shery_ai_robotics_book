@@ -5,10 +5,11 @@ Authentication API endpoints - User signup, login, logout
 from datetime import datetime, timedelta
 from typing import Optional
 import asyncpg
+import json
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr, Field
-import jwt
+from jose import jwt
 from passlib.context import CryptContext
 
 from config import settings
@@ -115,7 +116,7 @@ async def signup(user_data: UserCreate):
         user = await conn.fetchrow(
             """
             INSERT INTO users (email, password_hash, full_name, role, background, preferences)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            VALUES ($1, $2, $3, $4, $5, $6::jsonb)
             RETURNING id, email, full_name, role, background, created_at
             """,
             user_data.email,
@@ -123,7 +124,7 @@ async def signup(user_data: UserCreate):
             user_data.full_name,
             user_data.role or "student",
             user_data.background,
-            {}  # Empty JSON object for preferences
+            json.dumps({})  # Empty JSON object for preferences
         )
 
     # Create access token

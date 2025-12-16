@@ -134,7 +134,7 @@ def ingest_textbook_content(docs_dir: str):
     )
 
     # Create or recreate collection
-    collection_name = "textbook_content"
+    collection_name = settings.qdrant_collection_name
 
     try:
         qdrant_client.delete_collection(collection_name)
@@ -207,7 +207,7 @@ def ingest_textbook_content(docs_dir: str):
 
 if __name__ == "__main__":
     # Get docs directory
-    docs_dir = Path(__file__).parent.parent / "shery_ai_book" / "docs"
+    docs_dir = Path(__file__).parent.parent / "docs"
 
     if not docs_dir.exists():
         logger.error(f"Docs directory not found: {docs_dir}")
