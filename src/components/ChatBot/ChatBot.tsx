@@ -192,8 +192,13 @@ export default function ChatBot(): React.JSX.Element {
 
             {isLoading && (
               <div className="chatbot-message assistant">
-                <div className="typing-indicator">
-                  <span></span><span></span><span></span>
+                <div className="thinking-indicator">
+                  <span className="thinking-icon">🧠</span>
+                  <div className="thinking-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
                 </div>
               </div>
             )}
