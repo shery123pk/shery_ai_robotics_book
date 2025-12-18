@@ -133,6 +133,10 @@ Then add environment variables in Vercel Dashboard:
 
 ## Troubleshooting
 
+### HTTP 405 Error?
+
+This has been fixed! The backend now uses Mangum adapter to properly handle FastAPI on Vercel. Make sure you've deployed the latest code.
+
 ### Chatbot Still Not Working?
 
 1. **Check Browser Console**
@@ -150,6 +154,10 @@ Then add environment variables in Vercel Dashboard:
 4. **Check Backend Logs**
    - Go to backend project in Vercel
    - Click "Logs" to see runtime errors
+
+5. **Redeploy Backend**
+   - If you deployed before the HTTP 405 fix, redeploy your backend
+   - Go to Deployments → Latest → "..." → Redeploy
 
 ### Backend Deployment Failed?
 
