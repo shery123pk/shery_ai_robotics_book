@@ -1,27 +1,33 @@
 /**
  * API Configuration Utility
- * 
+ *
  * Determines the base URL for API requests based on environment.
- * 
+ *
  * Configuration Priority:
- * 1. Environment variable API_URL or REACT_APP_API_URL (set at build time)
- * 2. Development: Automatically detects localhost and uses http://localhost:8000
- * 3. Production: Uses relative path (if backend is on same domain)
+ * 1. Docusaurus customFields (set via API_URL environment variable)
+ * 2. Environment variable API_URL or REACT_APP_API_URL (set at build time)
+ * 3. Development: Automatically detects localhost and uses http://localhost:8000
+ * 4. Production: Uses relative path (if backend is on same domain)
  *                OR set API_URL environment variable for cross-domain backend
- * 
+ *
  * To set API_URL for production:
- * - Build time: Set environment variable before building
- *   Example: API_URL=https://your-backend.vercel.app npm run build
- * - Or add to docusaurus.config.ts customFields (requires config update)
- * 
+ * - Set in Vercel: Environment Variables → API_URL=https://your-backend.vercel.app
+ * - Build time: API_URL=https://your-backend.vercel.app npm run build
+ *
  * Note: Docusaurus webpack replaces process.env variables at build time.
- * Variables must be prefixed with REACT_APP_ or set via webpack DefinePlugin.
  */
 export function getApiBaseUrl(): string {
+  // Check Docusaurus customFields first (recommended approach)
+  if (typeof window !== 'undefined' && window['docusaurus']) {
+    const customFields = window['docusaurus']?.siteConfig?.customFields;
+    const apiUrl = customFields?.apiUrl;
+    if (apiUrl && typeof apiUrl === 'string' && apiUrl.trim() !== '') {
+      return apiUrl.trim();
+    }
+  }
+
   // Check for environment variable (set at build time)
-  // Docusaurus webpack replaces process.env variables at build time
-  // For Docusaurus, you can also use customFields in docusaurus.config.ts
-  const envApiUrl = 
+  const envApiUrl =
     (typeof process !== 'undefined' && process.env?.API_URL) ||
     (typeof process !== 'undefined' && process.env?.REACT_APP_API_URL);
 

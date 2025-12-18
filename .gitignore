@@ -11,6 +11,7 @@ backend/.env.local
 # API Keys
 **/config/secrets.json
 **/config/credentials.json
+VERCEL_ENV_SETUP.md
 
 # ===============================================
 # Python

@@ -9,6 +9,11 @@ const config: Config = {
   tagline: 'An AI-Native Interactive Textbook for Teaching Physical AI and Humanoid Robotics',
   favicon: 'img/favicon.ico',
 
+  // Custom fields for API configuration
+  customFields: {
+    apiUrl: process.env.API_URL || '',
+  },
+
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
