@@ -1,20 +1,32 @@
-# Vercel Deployment Checklist
+# Backend + Frontend Deployment Checklist
 
-Follow these steps in order to deploy your backend and fix the chatbot:
+**IMPORTANT:** The backend should be deployed to **Railway** (not Vercel) for best results. Vercel has issues with FastAPI apps.
 
-## ✅ Step 1: Deploy Backend to Vercel
+## ⚠️ Deployment Platform Decision
 
-### Via Vercel Dashboard (Recommended):
+- **Frontend**: ✅ Vercel (already working)
+- **Backend**: 🚂 **Railway** (recommended) or Render
 
-1. [ ] Go to https://vercel.com/dashboard
-2. [ ] Click "Add New..." → "Project"
-3. [ ] Select your GitHub repository: `shery_ai_robotics_book`
-4. [ ] Configure project:
-   - Project Name: `shery-ai-robotics-book-backend`
-   - Root Directory: `backend` (click Edit to select)
-   - Framework: Other
-5. [ ] Add environment variables (from `backend/.env`):
-   - [ ] OPENAI_API_KEY
+See `DEPLOYMENT_OPTIONS.md` for why Railway is better than Vercel for the backend.
+
+---
+
+## Quick Start (Railway - 5 minutes)
+
+Follow these steps in order:
+
+## ✅ Step 1: Deploy Backend to Railway
+
+1. [ ] Go to https://railway.app/
+2. [ ] Sign up with GitHub
+3. [ ] Click "Start a New Project"
+4. [ ] Select "Deploy from GitHub repo"
+5. [ ] Choose repository: `shery_ai_robotics_book`
+6. [ ] Configure deployment:
+   - [ ] Settings → Root Directory → Enter `backend` → Save
+   - [ ] (Railway auto-detects the start command)
+7. [ ] Add environment variables (Variables tab):
+   - [ ] OPENAI_API_KEY (from `backend/.env`)
    - [ ] QDRANT_URL
    - [ ] QDRANT_API_KEY
    - [ ] DATABASE_URL
@@ -24,14 +36,15 @@ Follow these steps in order to deploy your backend and fix the chatbot:
    - [ ] APP_VERSION=1.0.0
    - [ ] DEBUG=false
    - [ ] CORS_ORIGINS=["https://shery-ai-robotics-book.vercel.app"]
-6. [ ] Click "Deploy"
-7. [ ] Wait for deployment to complete
-8. [ ] **Copy your backend URL** (e.g., `https://shery-ai-robotics-book-backend.vercel.app`)
+8. [ ] Click "Deploy" (if not auto-deployed)
+9. [ ] Wait for deployment (~2-3 minutes)
+10. [ ] **Copy your Railway URL** (Settings → Domain)
+   - Example: `https://your-app.up.railway.app`
 
 ### Test Backend:
-9. [ ] Visit: `https://your-backend-url.vercel.app/`
+11. [ ] Visit: `https://your-railway-url.up.railway.app/`
    - Should see: `{"message": "Physical AI & Humanoid Robotics Textbook API", ...}`
-10. [ ] Visit: `https://your-backend-url.vercel.app/api/docs`
+12. [ ] Visit: `https://your-railway-url.up.railway.app/api/docs`
    - Should see: FastAPI interactive documentation
 
 ---
@@ -52,7 +65,7 @@ Follow these steps in order to deploy your backend and fix the chatbot:
 
 ## ✅ Step 3: Redeploy Frontend
 
-1. [ ] In frontend project, go to **Deployments** tab
+1. [ ] In Vercel frontend project, go to **Deployments** tab
 2. [ ] Click on the latest deployment
 3. [ ] Click "..." menu → **Redeploy**
 4. [ ] **Uncheck** "Use existing Build Cache"
