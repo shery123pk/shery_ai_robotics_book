@@ -15,10 +15,10 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://shery123pk.github.io',
+  url: 'https://shery-ai-robotics-book.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/shery_ai_robotics_book/',
+  // For Vercel deployment, use root path
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   organizationName: 'shery123pk', // Usually your GitHub org/user name.
