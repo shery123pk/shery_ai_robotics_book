@@ -10,6 +10,7 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Custom fields for API configuration
+  // API_URL must be set in Vercel environment variables
   customFields: {
     apiUrl: process.env.API_URL || 'http://localhost:8000',
   },
