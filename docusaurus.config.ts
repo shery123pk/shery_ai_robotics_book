@@ -10,9 +10,9 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Custom fields for API configuration
-  // API_URL must be set in Vercel environment variables
+  // Hardcoded to HF backend for immediate deployment
   customFields: {
-    apiUrl: process.env.API_URL || 'http://localhost:8000',
+    apiUrl: 'https://SharmeenAsif-ai-robotics-chatbot-backend.hf.space',
   },
 
   // Custom plugin to proxy API requests to backend during development
