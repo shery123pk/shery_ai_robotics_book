@@ -27,6 +27,11 @@ export default function ChatBot(): React.JSX.Element {
   const [sessionId] = useState(() => `session-${Date.now()}-${Math.random()}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Text selection state
+  const [selectedText, setSelectedText] = useState('');
+  const [showSelectionButton, setShowSelectionButton] = useState(false);
+  const [selectionPosition, setSelectionPosition] = useState({ x: 0, y: 0 });
+
   // Auto-scroll to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -42,10 +47,56 @@ export default function ChatBot(): React.JSX.Element {
       setMessages([{
         id: 'welcome',
         role: 'assistant',
-        content: 'Hi! I\'m your AI tutor for Physical AI & Humanoid Robotics. Ask me anything about ROS 2, simulation, NVIDIA Isaac, or VLA models!',
+        content: 'Hey there! 👋 I\'m your friendly AI tutor for Physical AI & Humanoid Robotics. Whether you\'re curious about ROS 2, simulation, NVIDIA Isaac, or VLA models - I\'m here to help you learn! What would you like to explore today?',
         timestamp: new Date()
       }]);
     }
+  }, []);
+
+  // Handle text selection
+  useEffect(() => {
+    const handleTextSelection = (e: MouseEvent | TouchEvent) => {
+      const selection = window.getSelection();
+      const text = selection?.toString().trim();
+
+      // Don't show button if selection is inside chatbot
+      const target = e.target as HTMLElement;
+      const isChatbotElement = target.closest('.chatbot-container') || target.closest('.chatbot-toggle');
+
+      if (text && text.length > 0 && !isChatbotElement) {
+        setSelectedText(text);
+
+        // Get selection position
+        const range = selection?.getRangeAt(0);
+        const rect = range?.getBoundingClientRect();
+
+        if (rect) {
+          setSelectionPosition({
+            x: rect.left + rect.width / 2,
+            y: rect.top - 10
+          });
+          setShowSelectionButton(true);
+        }
+      } else {
+        setShowSelectionButton(false);
+      }
+    };
+
+    const handleClickOutside = () => {
+      // Hide button when clicking outside
+      setShowSelectionButton(false);
+    };
+
+    // Add event listeners
+    document.addEventListener('mouseup', handleTextSelection as EventListener);
+    document.addEventListener('touchend', handleTextSelection as EventListener);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mouseup', handleTextSelection as EventListener);
+      document.removeEventListener('touchend', handleTextSelection as EventListener);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const sendMessage = async () => {
@@ -136,8 +187,49 @@ export default function ChatBot(): React.JSX.Element {
     }
   };
 
+  const handleAskAboutSelection = () => {
+    // Open chatbot and set input with selected text context
+    setIsOpen(true);
+    setInput(`Explain this: "${selectedText}"`);
+    setShowSelectionButton(false);
+
+    // Scroll to input area
+    setTimeout(() => {
+      const textarea = document.querySelector('.chatbot-input textarea') as HTMLTextAreaElement;
+      textarea?.focus();
+    }, 100);
+  };
+
   return (
     <>
+      {/* Text Selection Quick Chat Button */}
+      {showSelectionButton && (
+        <button
+          className="text-selection-button"
+          onClick={handleAskAboutSelection}
+          style={{
+            position: 'fixed',
+            left: `${selectionPosition.x}px`,
+            top: `${selectionPosition.y}px`,
+            transform: 'translate(-50%, -100%)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            border: 'none',
+            background: 'var(--ifm-color-primary)',
+            color: 'white',
+            fontSize: '18px',
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+            zIndex: 1001,
+            transition: 'all 0.2s',
+          }}
+          title="Ask AI about this text"
+        >
+          💬
+        </button>
+      )}
+
       {/* Floating Chat Button */}
       <button
         className="chatbot-toggle"

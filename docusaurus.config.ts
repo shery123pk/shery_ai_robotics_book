@@ -11,8 +11,31 @@ const config: Config = {
 
   // Custom fields for API configuration
   customFields: {
-    apiUrl: process.env.API_URL || '',
+    apiUrl: process.env.API_URL || 'http://localhost:8000',
   },
+
+  // Custom plugin to proxy API requests to backend during development
+  plugins: [
+    function proxyPlugin() {
+      return {
+        name: 'api-proxy-plugin',
+        configureWebpack() {
+          return {
+            devServer: {
+              proxy: [
+                {
+                  context: ['/api'],
+                  target: 'http://localhost:8000',
+                  changeOrigin: true,
+                  secure: false,
+                },
+              ],
+            },
+          };
+        },
+      };
+    },
+  ],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {

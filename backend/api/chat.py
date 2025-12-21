@@ -63,17 +63,25 @@ async def generate_response(query: str, contexts: List[dict]) -> tuple[str, List
     ])
 
     # System prompt
-    system_prompt = """You are an expert AI tutor for Physical AI and Humanoid Robotics.
-    Answer the student's question using ONLY the provided context from the textbook.
+    system_prompt = """You are a friendly and knowledgeable AI tutor for Physical AI and Humanoid Robotics.
+    You're here to help students learn about ROS 2, simulation, NVIDIA Isaac, and VLA models.
 
-    Rules:
-    1. Be concise and educational
-    2. Use technical terminology accurately
-    3. Reference specific modules/chapters when relevant
-    4. If the context doesn't contain the answer, say "I don't have information about that in the current textbook content."
-    5. Include code examples if present in context
+    Personality:
+    - Be warm, encouraging, and conversational
+    - Use a friendly, human tone (like talking to a friend)
+    - Respond to greetings naturally ("Hi!", "Hello!", "Hey there!")
+    - Show enthusiasm for the subject
+    - Be patient and understanding
 
-    Format your response in Markdown.
+    Teaching Guidelines:
+    1. When students ask questions, use the provided textbook context to give accurate answers
+    2. Explain concepts clearly and break down complex topics
+    3. Reference specific modules/chapters when it helps (e.g., "In Module 2, we learn that...")
+    4. Include code examples from context when available
+    5. If the context doesn't fully answer their question, acknowledge what you know and suggest related topics
+    6. For greetings or casual conversation, respond warmly without needing textbook context
+
+    Format: Use clear, friendly language. Use Markdown for code and formatting when helpful.
     """
 
     # User prompt
@@ -123,6 +131,33 @@ async def chat_message(request: ChatRequest):
 
     try:
         logger.info(f"Chat query: {request.message[:100]}")
+
+        # Check if it's a greeting or casual conversation
+        message_lower = request.message.lower().strip()
+        logger.info(f"Message lower: '{message_lower}'")
+
+        greetings = ['hi', 'hello', 'hey', 'hi there', 'hello there', 'hey there', 'good morning', 'good afternoon', 'good evening']
+        casual_phrases = ['how are you', 'whats up', 'what\'s up', 'sup', 'yo', 'hiya']
+
+        is_greeting = message_lower in greetings or any(phrase in message_lower for phrase in casual_phrases)
+        logger.info(f"Is greeting: {is_greeting}")
+
+        if is_greeting:
+            # Respond to greeting warmly without needing textbook context
+            logger.info("Responding with friendly greeting")
+            friendly_responses = [
+                "Hey there! 👋 I'm so glad you're here! I'm ready to help you learn about Physical AI and Humanoid Robotics. What topic would you like to explore? ROS 2, simulation, NVIDIA Isaac, or maybe VLA models?",
+                "Hi! 😊 Great to see you! I'm your AI tutor for robotics and I'm excited to help you learn. What are you curious about today?",
+                "Hello! 🤖 Welcome! I'm here to make learning Physical AI and Humanoid Robotics fun and easy. What would you like to know?",
+            ]
+            import random
+            response_text = random.choice(friendly_responses)
+            logger.info(f"Greeting response: {response_text[:50]}")
+            return ChatResponse(
+                response=response_text,
+                citations=[],
+                session_id=request.session_id
+            )
 
         # Retrieve relevant content
         contexts = await get_relevant_content(request.message, limit=5)

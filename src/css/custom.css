@@ -343,6 +343,31 @@
   transform: scale(0.95);
 }
 
+/* Text Selection Quick Chat Button */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -90%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}
+
+.text-selection-button {
+  animation: fadeInUp 0.2s ease-out;
+}
+
+.text-selection-button:hover {
+  transform: translate(-50%, -100%) scale(1.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.text-selection-button:active {
+  transform: translate(-50%, -100%) scale(0.95);
+}
+
 /* Personalize and Translate Button Styles */
 .content-action-button {
   margin: 16px 0;
