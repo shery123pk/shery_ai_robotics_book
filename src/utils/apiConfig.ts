@@ -48,11 +48,9 @@ export function getApiBaseUrl(): string {
     }
   }
 
-  // Production: Use relative path (assumes backend is on same domain)
-  // ⚠️ If your backend is on a DIFFERENT domain (e.g., Vercel, Railway),
-  //    you MUST set the API_URL environment variable before building:
-  //    API_URL=https://your-backend.vercel.app npm run build
-  return '';
+  // Production fallback: Hardcoded backend URL
+  // This ensures the chatbot works even if Docusaurus fails to initialize
+  return 'https://SharmeenAsif-ai-robotics-chatbot-backend.hf.space';
 }
 
 /**
