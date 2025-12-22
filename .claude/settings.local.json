@@ -12,7 +12,13 @@
       "Bash(pgrep:*)",
       "Bash(pkill:*)",
       "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZDdkYmIyNC03MTgxLTRhZTEtOGI1Zi0wOTM2YWU4NDY5NWIiLCJleHAiOjE3Njg0OTM4NTV9.IIVUetzn9VRhtpvUnHjqfgNEtXNifugFqUo2HYU_Qqw\")",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git restore:*)",
+      "Bash(git commit:*)",
+      "WebFetch(domain:shery-ai-robotics-book-backend.vercel.app)",
+      "Bash(python:*)"
     ],
     "deny": [],
     "ask": []
