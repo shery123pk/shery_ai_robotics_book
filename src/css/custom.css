@@ -399,6 +399,33 @@
   font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', serif !important;
 }
 
+/* Success Toast Animation */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Pop-in Animation for Selection Button */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.5);
+  }
+  50% {
+    transform: translate(-50%, -100%) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .chatbot-container {

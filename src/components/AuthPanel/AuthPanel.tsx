@@ -19,6 +19,7 @@ export default function AuthPanel(): JSX.Element {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // Form state
   const [email, setEmail] = useState('');
@@ -55,6 +56,11 @@ export default function AuthPanel(): JSX.Element {
       setIsOpen(false);
       setEmail('');
       setPassword('');
+      setError(null);
+
+      // Show success message
+      setSuccessMessage(`Welcome back, ${data.user.full_name}! 🎉`);
+      setTimeout(() => setSuccessMessage(null), 4000);
     } catch (err: any) {
       setError(err.message || 'Invalid email or password');
     } finally {
@@ -98,6 +104,11 @@ export default function AuthPanel(): JSX.Element {
       setPassword('');
       setFullName('');
       setBackground('');
+      setError(null);
+
+      // Show success message
+      setSuccessMessage(`Account created successfully! Welcome, ${data.user.full_name}! 🎉`);
+      setTimeout(() => setSuccessMessage(null), 4000);
     } catch (err: any) {
       setError(err.message || 'Signup failed. Email may already be registered.');
     } finally {
@@ -113,22 +124,54 @@ export default function AuthPanel(): JSX.Element {
 
   return (
     <>
+      {/* Success Toast */}
+      {successMessage && (
+        <div style={{
+          position: 'fixed',
+          top: '80px',
+          right: '20px',
+          zIndex: 10000,
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          padding: '16px 24px',
+          borderRadius: '12px',
+          boxShadow: '0 8px 24px rgba(102, 126, 234, 0.4)',
+          fontSize: '15px',
+          fontWeight: '500',
+          animation: 'slideInRight 0.3s ease-out',
+          maxWidth: '320px',
+        }}>
+          {successMessage}
+        </div>
+      )}
+
       {/* Auth Button */}
       {user ? (
         <div style={{ position: 'fixed', top: '70px', right: '20px', zIndex: 999 }}>
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}
             style={{
-              padding: '8px 16px',
-              background: 'var(--ifm-color-success)',
+              padding: '10px 18px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               color: 'white',
               border: 'none',
-              borderRadius: '4px',
+              borderRadius: '25px',
               cursor: 'pointer',
               fontSize: '14px',
+              fontWeight: '500',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '8px',
+              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
             }}
           >
             👤 {user.full_name} ▼
@@ -186,14 +229,28 @@ export default function AuthPanel(): JSX.Element {
             position: 'fixed',
             top: '70px',
             right: '20px',
-            padding: '8px 16px',
-            background: 'var(--ifm-color-primary)',
+            padding: '10px 20px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
             border: 'none',
-            borderRadius: '4px',
+            borderRadius: '25px',
             cursor: 'pointer',
             zIndex: 999,
             fontSize: '14px',
+            fontWeight: '600',
+            boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+            transition: 'all 0.3s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
           }}
         >
           🔐 Login

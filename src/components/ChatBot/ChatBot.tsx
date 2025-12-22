@@ -212,17 +212,29 @@ export default function ChatBot(): React.JSX.Element {
             left: `${selectionPosition.x}px`,
             top: `${selectionPosition.y}px`,
             transform: 'translate(-50%, -100%)',
-            width: '40px',
-            height: '40px',
+            width: '48px',
+            height: '48px',
             borderRadius: '50%',
-            border: 'none',
-            background: 'var(--ifm-color-primary)',
+            border: '2px solid white',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
-            fontSize: '18px',
+            fontSize: '20px',
             cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+            boxShadow: '0 6px 20px rgba(102, 126, 234, 0.5)',
             zIndex: 1001,
-            transition: 'all 0.2s',
+            transition: 'all 0.3s ease',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            animation: 'popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translate(-50%, -100%) scale(1.1)';
+            e.currentTarget.style.boxShadow = '0 8px 24px rgba(102, 126, 234, 0.6)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translate(-50%, -100%) scale(1)';
+            e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.5)';
           }}
           title="Ask AI about this text"
         >
@@ -242,12 +254,24 @@ export default function ChatBot(): React.JSX.Element {
           height: '60px',
           borderRadius: '50%',
           border: 'none',
-          background: 'var(--ifm-color-primary)',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           color: 'white',
           fontSize: '24px',
           cursor: 'pointer',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          boxShadow: '0 6px 20px rgba(102, 126, 234, 0.4)',
           zIndex: 1000,
+          transition: 'all 0.3s ease',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.boxShadow = '0 8px 24px rgba(102, 126, 234, 0.5)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
         }}
       >
         {isOpen ? '✕' : '💬'}
