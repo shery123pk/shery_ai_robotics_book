@@ -26,6 +26,7 @@ export default function ChatBot(): React.JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => `session-${Date.now()}-${Math.random()}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [showAuthorInfo, setShowAuthorInfo] = useState(false);
 
   // Text selection state
   const [selectedText, setSelectedText] = useState('');
@@ -47,7 +48,7 @@ export default function ChatBot(): React.JSX.Element {
       setMessages([{
         id: 'welcome',
         role: 'assistant',
-        content: 'Hey there! 👋 I\'m your friendly AI tutor for Physical AI & Humanoid Robotics. Whether you\'re curious about ROS 2, simulation, NVIDIA Isaac, or VLA models - I\'m here to help you learn! What would you like to explore today?',
+        content: 'Hey there! 👋 I\'m your friendly AI tutor for Physical AI & Humanoid Robotics, created by Sharmeen Asif. Whether you\'re curious about ROS 2, simulation, NVIDIA Isaac, or VLA models - I\'m here to help you learn!\n\nClick "👤 About Author" in the header to learn more about the creator, or ask me anything about robotics!',
         timestamp: new Date()
       }]);
     }
@@ -211,10 +212,21 @@ export default function ChatBot(): React.JSX.Element {
       setMessages([{
         id: 'welcome',
         role: 'assistant',
-        content: 'Hey there! 👋 I\'m your friendly AI tutor for Physical AI & Humanoid Robotics. Whether you\'re curious about ROS 2, simulation, NVIDIA Isaac, or VLA models - I\'m here to help you learn! What would you like to explore today?',
+        content: 'Hey there! 👋 I\'m your friendly AI tutor for Physical AI & Humanoid Robotics, created by Sharmeen Asif. Whether you\'re curious about ROS 2, simulation, NVIDIA Isaac, or VLA models - I\'m here to help you learn!\n\nClick "👤 About Author" in the header to learn more about the creator, or ask me anything about robotics!',
         timestamp: new Date()
       }]);
     }
+  };
+
+  const showAuthorProfile = () => {
+    const authorMessage: Message = {
+      id: `author-${Date.now()}`,
+      role: 'assistant',
+      content: `📚 **About the Author - Sharmeen Asif**\n\n**Location:** Karachi, Pakistan\n**Contact:** codeshery@gmail.com | +92 321 2783184\n**LinkedIn:** linkedin.com/in/sharmeen-asif-654727373\n**GitHub:** github.com/shery123pk\n\n**Professional Summary:**\nIT Administrative Professional with 18+ years of experience in computer operations, technical training, and data management. Currently advancing skills in AI, Python, and Next.js through PIAIC and GIAIC programs.\n\n**Education:**\n• Master of Computer Science (MCS) - COMSATS University Islamabad (2018)\n• Bachelor of Education (B.Ed.) - AIOU (2014)\n• Diploma in Information Technology - SBTE (2005)\n• BSc Premedical - University of Karachi\n\n**Current Training:**\n• PIAIC Agent AI Program (Level 3) - AI agents & automation\n• GIAIC - AI, ML, and modern web development\n\n**Core Expertise:**\n• Python | Next.js | Agent SDK | n8n | MS Office Suite\n• AI Development | System Administration | Technical Training\n• 18+ years in IT administration and education\n\n**Professional Experience:**\n• EAB Haroon Bahria College (2012-Present) - IT Administrator\n• Pakistan Navy Computer Training Center (2005-2010) - Technical Trainer\n\nSharmeen has trained 200+ students annually and maintains 100% system uptime for 500+ users. This AI-powered textbook is a result of her passion for combining education with cutting-edge AI technology! 🚀`,
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, authorMessage]);
+    setShowAuthorInfo(false);
   };
 
   return (
@@ -301,6 +313,32 @@ export default function ChatBot(): React.JSX.Element {
             <h3>AI Tutor</h3>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <button
+                onClick={showAuthorProfile}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  border: 'none',
+                  color: 'white',
+                  padding: '6px 12px',
+                  borderRadius: '16px',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                }}
+                title="About the author"
+              >
+                👤 Author
+              </button>
+              <button
                 onClick={clearChat}
                 style={{
                   background: 'rgba(255, 255, 255, 0.2)',
@@ -336,7 +374,7 @@ export default function ChatBot(): React.JSX.Element {
                 key={message.id}
                 className={`chatbot-message ${message.role}`}
               >
-                <div className="message-content">
+                <div className="message-content" style={{ whiteSpace: 'pre-wrap' }}>
                   {message.content}
 
                   {message.citations && message.citations.length > 0 && (
