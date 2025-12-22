@@ -82,7 +82,12 @@ export default function ChatBot(): React.JSX.Element {
       }
     };
 
-    const handleClickOutside = () => {
+    const handleClickOutside = (e: MouseEvent) => {
+      // Don't hide button if clicking the selection button itself
+      const target = e.target as HTMLElement;
+      if (target.closest('.text-selection-button')) {
+        return;
+      }
       // Hide button when clicking outside
       setShowSelectionButton(false);
     };
@@ -90,12 +95,12 @@ export default function ChatBot(): React.JSX.Element {
     // Add event listeners
     document.addEventListener('mouseup', handleTextSelection as EventListener);
     document.addEventListener('touchend', handleTextSelection as EventListener);
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside as EventListener);
 
     return () => {
       document.removeEventListener('mouseup', handleTextSelection as EventListener);
       document.removeEventListener('touchend', handleTextSelection as EventListener);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside as EventListener);
     };
   }, []);
 
@@ -200,6 +205,18 @@ export default function ChatBot(): React.JSX.Element {
     }, 100);
   };
 
+  const clearChat = () => {
+    if (window.confirm('Are you sure you want to clear all chat messages?')) {
+      // Keep only the welcome message
+      setMessages([{
+        id: 'welcome',
+        role: 'assistant',
+        content: 'Hey there! 👋 I\'m your friendly AI tutor for Physical AI & Humanoid Robotics. Whether you\'re curious about ROS 2, simulation, NVIDIA Isaac, or VLA models - I\'m here to help you learn! What would you like to explore today?',
+        timestamp: new Date()
+      }]);
+    }
+  };
+
   return (
     <>
       {/* Text Selection Quick Chat Button */}
@@ -282,7 +299,35 @@ export default function ChatBot(): React.JSX.Element {
         <div className="chatbot-container">
           <div className="chatbot-header">
             <h3>AI Tutor</h3>
-            <button onClick={() => setIsOpen(false)}>✕</button>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <button
+                onClick={clearChat}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  border: 'none',
+                  color: 'white',
+                  padding: '6px 12px',
+                  borderRadius: '16px',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                }}
+                title="Clear all messages"
+              >
+                🗑️ Clear
+              </button>
+              <button onClick={() => setIsOpen(false)}>✕</button>
+            </div>
           </div>
 
           <div className="chatbot-messages">
